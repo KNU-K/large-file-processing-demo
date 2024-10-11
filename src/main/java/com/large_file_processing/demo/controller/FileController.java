@@ -23,8 +23,13 @@ import java.util.List;
 public class FileController {
     private final LocalFileUploadService localFileUploadService;
     @PostMapping
-    public String upload(@RequestParam("file") MultipartFile file) {
-        log.info("Received file: {}", file.getOriginalFilename());
-        return localFileUploadService.upload(file);
+    public String upload( @RequestParam("file") MultipartFile file,
+                          @RequestParam("filename") String filename,
+                          @RequestParam("originalFilename") String originalFilename,
+                          @RequestParam("chunkIndex") int chunkIndex,
+                          @RequestParam("totalChunks") int totalChunks) {
+        log.info("Received file: {}", originalFilename);
+
+        return localFileUploadService.upload(file, originalFilename, chunkIndex, totalChunks);
     }
 }
