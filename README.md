@@ -11,3 +11,10 @@
 - Enhance the efficiency of processing and transferring large files by effectively splitting MP4 files into chunks for transmission and integration.
 - Improve user experience by allowing users to upload files seamlessly without delays.
 - Optimize server resources to ensure stable file processing.
+
+### 1-3. Key Tech
+1. Low integration of large amounts of data with message broker
+
+2. Asynchronous and non-blocking for optimal speed
+
+3. Place a sequence number to ensure the order between the chunk files
