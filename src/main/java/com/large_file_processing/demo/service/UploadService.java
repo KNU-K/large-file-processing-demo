@@ -3,6 +3,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface UploadService {
-    String upload(MultipartFile file, String originalFilename, int chunkIndex, int totalChunks) ;
-    String uploadBulk(List<MultipartFile> files);
+    String uploadChunk(MultipartFile file, String originalFilename, int chunkIndex, int totalChunks) ;
+    String upload(MultipartFile file) ;
 }

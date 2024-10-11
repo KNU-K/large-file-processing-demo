@@ -11,15 +11,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Service
 @Slf4j
-public class LocalFileUploadService {
+public class FileUploadService implements UploadService{
     private static final String UPLOAD_DIR = "C:/path/to/upload/dir"; // 최종 파일이 저장될 경로
     private static final String TEMP_DIR = UPLOAD_DIR + "/temp";  // 임시 디렉토리
 
-    public String upload(MultipartFile file, String originalFilename, int chunkIndex, int totalChunks) {
+
+    @Override
+    public String uploadChunk(MultipartFile file, String originalFilename, int chunkIndex, int totalChunks) {
         try {
             Path tempFilePath = Paths.get(TEMP_DIR, originalFilename + "_part_" + chunkIndex);
             Files.createDirectories(tempFilePath.getParent());
@@ -57,4 +58,22 @@ public class LocalFileUploadService {
         }
     }
 
+
+    @Override
+    public String upload(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.isEmpty()) {
+            throw new FileUploadException("Filename is empty or null");
+        }
+
+        Path finalFilePath = Paths.get(UPLOAD_DIR, originalFilename);
+
+        try {
+            Files.createDirectories(finalFilePath.getParent());
+            file.transferTo(finalFilePath.toFile());
+            return "File uploaded successfully: " + finalFilePath.toString();
+        } catch (IOException e) {
+            throw new FileUploadException("Failed to upload file", e);
+        }
+    }
 }
